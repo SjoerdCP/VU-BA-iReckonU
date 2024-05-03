@@ -2,6 +2,7 @@ from LoadDataset import load_dataset
 from PreprocessData import preprocess_data
 from DefineModel import create_model, fit_model
 from EvaluateModel import evaluate_model
+from Plot import plotHistory
 
 import tensorflow as tf 
 
@@ -18,3 +19,5 @@ epochs = 25
 history = fit_model(model, epochs, X_train, y_train, X_val, y_val)
 
 evaluate_model(model, X_val, y_val)
+
+plotHistory(history)
