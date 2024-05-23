@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 
 def plotHistory(history):
     # Plot training & validation accuracy values
-    plt.plot(history.history['accuracy'])
-    plt.plot(history.history['val_accuracy'])
+    plt.plot(history.history['fbeta_score'])
+    plt.plot(history.history['val_fbeta_score'])
     plt.title('Model accuracy')
     plt.ylabel('Accuracy')
     plt.xlabel('Epoch')

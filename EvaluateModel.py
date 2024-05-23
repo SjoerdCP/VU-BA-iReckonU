@@ -1,5 +1,7 @@
 import numpy as np
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, confusion_matrix, ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
+
 
 def evaluate_model(model, X_test, y_true):
     # Predict classes or probabilities depending on the needs for metrics
@@ -21,3 +23,16 @@ def evaluate_model(model, X_test, y_true):
     print(f'F1 Score: {f1}')
     print(f'ROC-AUC Score: {roc_auc}')
     print(f'Confusion Matrix:\n{conf_matrix}')
+
+    disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix, display_labels=['Sharp', 'Blurred'])
+    disp.plot(cmap = 'Reds', colorbar = False, text_kw = {'fontsize': 12})
+
+    ax = plt.gca()
+
+    # Optionally, you can also increase the font size of the axis labels
+    ax.set_xlabel('Predicted label', fontsize=14)
+    ax.set_ylabel('True label', fontsize=14)
+    ax.set_xticklabels(['Sharp', 'Blurred'], fontsize=12)
+    ax.set_yticklabels(['Sharp', 'Blurred'], fontsize=12)
+
+    plt.show()

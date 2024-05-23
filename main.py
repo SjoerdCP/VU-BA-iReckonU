@@ -1,14 +1,21 @@
 from LoadDataset import load_dataset
+from LoadPublicDataset import load_public_dataset
 from PreprocessData import preprocess_data
 from DefineModel import create_model, fit_model
 from EvaluateModel import evaluate_model
 from Plot import plotHistory
 
 import tensorflow as tf 
+import numpy as np
 
 tf.keras.utils.set_random_seed(12345)
 
-X_train, X_val, y_train, y_val = load_dataset('Sharp', 'Blurry')
+blur_folder = './CERTH_ImageBlurDataset/TrainingSet/Naturally-Blurred'
+sharp_folder = './CERTH_ImageBlurDataset/TrainingSet/Undistorted'
+
+#X_train, X_val, y_train, y_val = load_dataset('Sharp', 'Blurry')
+X_train, X_val, y_train, y_val = load_public_dataset(sharp_folder, blur_folder)
+#X_train, X_val, y_train, y_val = load_public_dataset('Sharp', 'Blurry')
 
 X_train = preprocess_data(X_train)
 X_val = preprocess_data(X_val)
