@@ -33,3 +33,5 @@ def fit_model(model, epochs, X_train, y_train, X_val, y_val):
     print(f'Validation loss: {val_loss}, Validation accuracy: {val_acc}')
 
     return history
+
+# HELLO
