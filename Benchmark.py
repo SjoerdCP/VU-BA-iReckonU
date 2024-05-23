@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 import tensorflow as tf 
 tf.keras.utils.set_random_seed(12345)
 
-blur_folder = './CERTH_ImageBlurDataset/TrainingSet/Naturally-Blurred'
-sharp_folder = './CERTH_ImageBlurDataset/TrainingSet/Undistorted'
+blur_folder = './PublicDataset/Train/Naturally-Blurred'
+sharp_folder = './PublicDataset/Train/Undistorted'
 
 X_train, X_val, y_train, y_val = load_public_dataset(sharp_folder, blur_folder)
 #X_train, X_val, y_train, y_val = load_public_dataset('Sharp', 'Blurry')

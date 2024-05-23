@@ -17,8 +17,8 @@ def load_images_from_folder(folder, label):
     return images, labels
 
 def load_public_dataset(folder_sharp, folder_blurry):
-    sharp_images, sharp_labels = load_images_from_folder(folder_sharp, 0)  # Label 1 for sharp
-    blurry_images, blurry_labels = load_images_from_folder(folder_blurry, 1)  # Label 0 for blurry
+    sharp_images, sharp_labels = load_images_from_folder(folder_sharp, 0)  # Label 0 for sharp
+    blurry_images, blurry_labels = load_images_from_folder(folder_blurry, 1)  # Label 1 for blurry
 
     # More sharp than blurred
     sharp_indices = np.random.choice(len(sharp_images), size=len(blurry_images), replace=False)
