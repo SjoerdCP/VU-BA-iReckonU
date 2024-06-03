@@ -3,7 +3,7 @@ from LoadPublicDataset import load_public_dataset
 from PreprocessData import preprocess_data
 from DefineModel import create_model, fit_model
 from EvaluateModel import evaluate_model
-from Plot import plotHistory
+from OldCode.Plot import plotHistory
 
 import tensorflow as tf 
 import numpy as np
