@@ -14,7 +14,7 @@ def evaluate_model(model, X_test, y_true):
     recall = recall_score(y_true, y_pred)
     f1 = f1_score(y_true, y_pred)
     f05 = fbeta_score(y_true, y_pred, beta= 0.5)
-    roc_auc = roc_auc_score(y_true, y_pred_prob)  # Use probabilities for ROC AUC
+    # roc_auc = roc_auc_score(y_true, y_pred_prob)  # Use probabilities for ROC AUC
     conf_matrix = confusion_matrix(y_true, y_pred)
 
     # Printing the metrics
@@ -23,7 +23,7 @@ def evaluate_model(model, X_test, y_true):
     print(f'Recall: {recall}')
     print(f'F1 Score: {f1}')
     print(f'F0.5 Score: {f05}')
-    print(f'ROC-AUC Score: {roc_auc}')
+    # print(f'ROC-AUC Score: {roc_auc}')
     print(f'Confusion Matrix:\n{conf_matrix}')
 
     disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix, display_labels=['Sharp', 'Blurred'])

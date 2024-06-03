@@ -1,34 +1,68 @@
 import os
-import cv2
 import numpy as np
 from sklearn.model_selection import train_test_split
+from sklearn.utils import resample
+import pandas as pd
+from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
-def load_images_from_folder(folder, label):
-    images = []
+def load_dataset_new(data_dir, categories):
+
+    # Create a DataFrame with file paths and labels
+    file_paths = []
     labels = []
-        
-    for filename in os.listdir(folder):
-        img = cv2.imread(os.path.join(folder, filename))
-        if img is not None:
-            # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # Convert to grayscale
-            img = cv2.resize(img, (256, 256))  # Resize to 256x256
-            images.append(img)
-            labels.append(label)
-    return images, labels
 
-def load_dataset(folder_sharp, folder_blurry):
-    sharp_images, sharp_labels = load_images_from_folder(folder_sharp, 0)  # Label 0 for sharp
-    blurry_images, blurry_labels = load_images_from_folder(folder_blurry, 1)  # Label 1 for blurry
+    for category in categories:
+        category_path = os.path.join(data_dir, category)
+        for file_name in os.listdir(category_path):
+            if file_name[-4:] == '.jpg':
+                file_paths.append(os.path.join(category, file_name))
+                print(file_paths)
+                labels.append(category)
 
-    X = sharp_images + blurry_images
-    y = sharp_labels + blurry_labels
+    df = pd.DataFrame({'file_path': file_paths, 'label': labels})
 
-    # Convert to numpy arrays
-    X = np.array(X)
-    y = np.array(y)
+    # Undersample the majority class in the training data
+    # Separate majority and minority classes
+    df_majority = df[df['label'] == categories[1]]
+    df_minority = df[df['label'] == categories[0]]
 
-    # Split data into training and validation
-    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+    # Undersample majority class
+    df_majority_undersampled = resample(df_majority,
+                                        replace=False,     # Sample without replacement
+                                        n_samples=len(df_minority))    # Match number of samples in minority class
 
-    return (X_train, X_val, y_train, y_val)
-    # Now X_train, X_val, y_train, and y_val can be used for model training and validation
+    # Combine minority class with undersampled majority class
+    df_undersampled = pd.concat([df_minority, df_majority_undersampled])
+
+    # Perform stratified splitting
+    train_df, val_df = train_test_split(df_undersampled	, test_size=0.2, stratify=df_undersampled['label'])
+
+    # Parameters
+    img_height = 256
+    img_width = 256
+
+    def load_images(df):
+        images = []
+        labels = []
+        for index, row in df.iterrows():
+            img = load_img(row['file_path'], target_size=(img_height, img_width))
+            img_array = img_to_array(img)
+            images.append(img_array)
+            labels.append(row['label'])
+        return np.array(images), np.array(labels)
+
+    # Load training images and labels
+    X_train, y_train = load_images(train_df)
+
+    # # Load validation images and labels
+    X_val, y_val = load_images(val_df)
+
+    # # Convert labels to binary (0 and 1)
+    label_to_index = {categories[0]: 1, categories[1]: 0}
+    y_train = np.array([label_to_index[label] for label in y_train])
+    y_val = np.array([label_to_index[label] for label in y_val])
+
+    y_train = y_train.reshape(-1, 1)
+    y_val = y_val.reshape(-1, 1)
+
+    return X_train, y_train, X_val, y_val, 

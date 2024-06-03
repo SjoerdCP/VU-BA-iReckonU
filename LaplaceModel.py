@@ -27,12 +27,12 @@ class LaplaceModel:
         print(res)
         print(accuracy_min(self.threshold, vars, y))
 
-        df = pd.DataFrame(zip(vars, y), columns = ['var', 'label'])
-        sns.histplot(data = df, x = 'var', hue = 'label')
-        plt.show()
+        # df = pd.DataFrame(zip(vars, y), columns = ['var', 'label'])
+        # sns.histplot(data = df, x = 'var', hue = 'label')
+        # plt.show()
     
     def predict(self, X_test):
-        return [1 if laplacian_var(img) < self.threshold else 0 for img in X_test]
+        return np.array([1 if laplacian_var(img) < self.threshold else 0 for img in X_test])
     
     def set_threshold(self, new_threshold):
         self.threshold = new_threshold
