@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.utils import resample
 import pandas as pd
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
+from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array, array_to_img
 
 # Function to create a dataframe that contains image locations and labels
 def read_filepaths(data_dir, classes):
@@ -142,3 +142,34 @@ def load_sewer_dataset(data_dir, categories):
     # Return the images and image labels
     return X_test, y_test
 
+def augment_and_save_images(image_dir, save_dir, augment_count=5):
+    # Define the augmentation parameters
+    datagen = ImageDataGenerator(
+        rotation_range=40,
+        width_shift_range=0.2,
+        height_shift_range=0.2,
+        shear_range=0.2,
+        zoom_range=0.2,
+        horizontal_flip=True,
+        fill_mode='nearest'
+    )
+    
+    # List all images in the directory
+    image_files = [os.path.join(image_dir, f) for f in os.listdir(image_dir) if f.endswith(('.jpg', '.jpeg', '.png'))]
+    
+    for image_file in image_files:
+        # Load the image
+        img = load_img(image_file)
+        x = img_to_array(img)  # Convert the image to a numpy array
+        x = np.expand_dims(x, axis=0)  # Expand dimensions to fit the model's input format
+        
+        # Create an iterator for augmentations
+        it = datagen.flow(x, batch_size=1)
+        
+        # Generate and save augmented images
+        base_name = os.path.basename(image_file).split('.')[0]
+        for i in range(augment_count):
+            augmented_image = next(it)[0].astype(np.uint8)
+            save_path = os.path.join(save_dir, f"{base_name}_aug_{i+1}.jpg")
+            array_to_img(augmented_image).save(save_path)
+            print(f"Saved {save_path}")
