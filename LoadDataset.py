@@ -142,20 +142,15 @@ def load_sewer_dataset(data_dir, categories):
     # Return the images and image labels
     return X_test, y_test
 
-def augment_and_save_images(image_dir, save_dir, augment_count=5):
+def augment_and_save_images(image_dir, save_dir, augment_count=3):
     # Define the augmentation parameters
     datagen = ImageDataGenerator(
-        rotation_range=40,
-        width_shift_range=0.2,
-        height_shift_range=0.2,
-        shear_range=0.2,
-        zoom_range=0.2,
-        horizontal_flip=True,
-        fill_mode='nearest'
+        vertical_flip = True,
+        horizontal_flip=True
     )
     
     # List all images in the directory
-    image_files = [os.path.join(image_dir, f) for f in os.listdir(image_dir) if f.endswith(('.jpg', '.jpeg', '.png'))]
+    image_files = [os.path.join(image_dir, f) for f in os.listdir(image_dir) if f.endswith(('.jpg', '.jpeg', '.png', '.JPG'))]
     
     for image_file in image_files:
         # Load the image
@@ -173,3 +168,25 @@ def augment_and_save_images(image_dir, save_dir, augment_count=5):
             save_path = os.path.join(save_dir, f"{base_name}_aug_{i+1}.jpg")
             array_to_img(augmented_image).save(save_path)
             print(f"Saved {save_path}")
+
+def load_train_val(train_dir, val_dir, classes):
+    train_df = read_filepaths(train_dir, classes)
+    val_df = read_filepaths(val_dir, classes)
+
+    # Load training images and labels
+    X_train, y_train = load_images(train_df)
+
+    # Load validation images and labels
+    X_val, y_val = load_images(val_df)
+
+    # Convert labels to binary (0 and 1)
+    label_to_index = {classes[0]: 1, classes[1]: 0}
+    y_train = np.array([label_to_index[label] for label in y_train])
+    y_val = np.array([label_to_index[label] for label in y_val])
+
+    # Change the shape of the labels
+    y_train = y_train.reshape(-1, 1)
+    y_val = y_val.reshape(-1, 1)
+
+    # Return the training and validation images and labels
+    return X_train, y_train, X_val, y_val

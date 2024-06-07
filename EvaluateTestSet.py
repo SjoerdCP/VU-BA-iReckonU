@@ -5,7 +5,7 @@ import pickle
 
 # Set parameters
 public_testset = False
-cnn = True
+cnn = False
 
 # Load test data
 if public_testset:
@@ -22,14 +22,17 @@ if public_testset:
 else:
 
     # Set directory and classes
-    data_dir = ''
-    classes = ['Blurry', 'Sharp']
+    data_dir = 'SewerNoText'
+    classes = ['Blurred', 'Sharp']
+
+    # data_dir = ''
+    # classes = ['Blurry', 'Sharp']
 
     # Load images and labels
     X_test, y_test = load_sewer_dataset(data_dir, classes)
 
 # Load model
-model = 'MaxResNet50' if cnn else 'public_laplacian'
+model = 'AugmentedMaxResNet50' if cnn else 'public_laplacian'
 model = 'Models/' + model + '.pkl'
 
 with open(model, 'rb') as file:
@@ -37,4 +40,3 @@ with open(model, 'rb') as file:
 
 # Evaluate model
 evaluate_model(model, X_test, y_test)
-
