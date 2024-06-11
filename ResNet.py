@@ -1,7 +1,7 @@
 # Import packages and functions
 import tensorflow as tf
 import pickle
-from tensorflow.keras.applications import ResNet50
+from tensorflow.keras.applications import ResNet50, ResNet152
 from tensorflow.keras.layers import Dense, GlobalMaxPooling2D
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
@@ -28,7 +28,7 @@ train_data = train_data.map(lambda x, y: (x, tf.cast(y, tf.float32)))
 val_data = val_data.map(lambda x, y: (x, tf.cast(y, tf.float32)))
 
 # Load pre-trained ResNet50 model without the classification layers
-base_model = ResNet50(weights='imagenet', include_top=False)
+base_model = ResNet152(weights='imagenet', include_top=False)
 
 # Add the custom classification layers
 x = base_model.output
@@ -56,7 +56,7 @@ model.fit(train_data, epochs=100, validation_data=val_data, callbacks = [callbac
 evaluate_model(model, X_val, y_val)
 
 # Store the model
-model_name = 'AugmentedMaxResNet50.pkl'
+model_name = 'AugmentedMaxResNet152.pkl'
 
 with open('Models/' + model_name, 'wb') as file:
     pickle.dump(model, file)

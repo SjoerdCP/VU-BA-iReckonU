@@ -5,7 +5,7 @@ import pickle
 
 # Set parameters
 public_testset = False
-cnn = False
+cnn = True
 
 # Load test data
 if public_testset:
@@ -32,7 +32,7 @@ else:
     X_test, y_test = load_sewer_dataset(data_dir, classes)
 
 # Load model
-model = 'AugmentedMaxResNet50' if cnn else 'public_laplacian'
+model = 'AugmentedMaxResNet152' if cnn else 'public_laplacian'
 model = 'Models/' + model + '.pkl'
 
 with open(model, 'rb') as file:
