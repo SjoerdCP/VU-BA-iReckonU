@@ -1,13 +1,13 @@
 # Import packages and functions
 import tensorflow as tf
 import pickle
-from tensorflow.keras.applications import ResNet50
+from tensorflow.keras.applications import ResNet101
 from tensorflow.keras.layers import Dense, GlobalMaxPooling2D
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping
 from EvaluateModel import evaluate_model
-from LoadDataset import load_dataset, load_train_val
+from LoadDataset import load_dataset
 
 # Set seed to have reproducible results
 tf.keras.utils.set_random_seed(12345)
@@ -28,7 +28,7 @@ train_data = train_data.map(lambda x, y: (x, tf.cast(y, tf.float32)))
 val_data = val_data.map(lambda x, y: (x, tf.cast(y, tf.float32)))
 
 # Load pre-trained ResNet50 model without the classification layers
-base_model = ResNet50(weights='imagenet', include_top=False)
+base_model = ResNet101(weights='imagenet', include_top=False)
 
 # Add the custom classification layers
 x = base_model.output
