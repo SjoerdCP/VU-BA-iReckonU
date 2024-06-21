@@ -22,11 +22,11 @@ if public_testset:
 else:
 
     # Set directory and classes
-    data_dir = 'SewerNoText'
-    classes = ['Blurred', 'Sharp']
+    # data_dir = 'SewerNoText'
+    # classes = ['Blurred', 'Sharp']
 
-    # data_dir = ''
-    # classes = ['Blurry', 'Sharp']
+    data_dir = 'Sewer_dataset_2'
+    classes = ['Blurry', 'Sharp']
 
     # Load images and labels
     X_test, y_test = load_sewer_dataset(data_dir, classes)
