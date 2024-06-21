@@ -1,13 +1,14 @@
 # Import packages and functions
 import tensorflow as tf
 import pickle
-from tensorflow.keras.applications import ResNet50, ResNet152
-from tensorflow.keras.layers import Dense, GlobalMaxPooling2D
+import os
+from tensorflow.keras.applications import ResNet50, ResNet101, ResNet152
+from tensorflow.keras.layers import Dense, GlobalMaxPooling2D, Input
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping
-from EvaluateModel import evaluate_model
-from LoadDataset import load_dataset, load_train_val
+from LoadDataset import load_train_val_dataset
+import matplotlib.pyplot as plt
 
 # Set seed to have reproducible results
 tf.keras.utils.set_random_seed(12345)
@@ -38,8 +39,9 @@ try:
     train_data = train_data.map(lambda x, y: (x, tf.cast(y, tf.float32)))
     val_data = val_data.map(lambda x, y: (x, tf.cast(y, tf.float32)))
 
-# Load pre-trained ResNet50 model without the classification layers
-base_model = ResNet152(weights='imagenet', include_top=False)
+    if model_type == 'ResNet50':
+        # Load pre-trained ResNet50 model without the classification layers
+        base_model = ResNet50(weights='imagenet', include_top=False)
 
     elif model_type == 'ResNet101':
         # Load pre-trained ResNet101 model without the classification layers
@@ -72,7 +74,7 @@ base_model = ResNet152(weights='imagenet', include_top=False)
     callback = EarlyStopping(restore_best_weights = True, patience=3)
 
     # Fit the model
-    history = model.fit(train_data, epochs=2, validation_data=val_data, callbacks = [callback])
+    history = model.fit(train_data, epochs= 100, validation_data=val_data, callbacks = [callback])
 
     def plot_history(history):
         # Plot training & validation loss values
@@ -103,8 +105,9 @@ base_model = ResNet152(weights='imagenet', include_top=False)
     # Get the path where to store the model
     model_path = os.path.join(model_dir, model_name)
 
-# Store the model
-model_name = 'AugmentedMaxResNet152.pkl'
+    # Store the model
+    with open(model_path, 'wb') as file:
+        pickle.dump(model, file)
 
-with open('Models/' + model_name, 'wb') as file:
-    pickle.dump(model, file)
+except Exception as e:
+    print(f"An error occurred: {e}")

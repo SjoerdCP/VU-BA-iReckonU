@@ -43,5 +43,5 @@ def remove_text(img_dir, save_dir):
 
             print(f'Saved {path}')
 
-remove_text('./Sewer_dataset_2/Blurry', './SewerNoText/Blurred')
-remove_text('./Sewer_dataset_2/Sharp', './SewerNoText/Sharp')
+remove_text('SewerImgs/Majority/Blurred', 'SewerImgs/MajorityNoText/Blurred')
+remove_text('SewerImgs/Majority/Sharp', 'SewerImgs/MajorityNoText/Sharp')

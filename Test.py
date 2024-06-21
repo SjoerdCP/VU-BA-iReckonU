@@ -6,7 +6,7 @@ import numpy as np
 
 save_dir = 'Results'
 
-model = 'AugmentedMaxResNet50'
+model = 'AugmentedMaxResNet152'
 model = 'Models/' + model + '.pkl'
 
 with open(model, 'rb') as file:
